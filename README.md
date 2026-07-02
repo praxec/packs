@@ -1,16 +1,20 @@
 # Praxec Packs
 
-A registry of **capability & workflow packs** for [Praxec](https://github.com/praxec/praxec) —
-curated libraries of `cap.*` capabilities and `flow.*` orchestrators you load into a Praxec
-gateway through its multi-repo loader.
+The registry of **workflow packs** and the **MCP tools** they depend on, for
+[Praxec](https://github.com/praxec/praxec).
 
-This repo doesn't hold the packs themselves. It's the index that tracks **where they live, what
-they provide, and how to load them** — so tools (and the [praxec.dev](https://praxec.dev) site's
-"available packs" page) can render the catalog from one machine-readable source: [`packs.yaml`](packs.yaml).
+- A **pack** is a curated library of `cap.*` capabilities and `flow.*` orchestrators you load into
+  a gateway via its multi-repo loader (pure YAML — nothing to install).
+- A **tool** is a standalone MCP server a pack *spawns* as a `kind: mcp` connection (a real binary
+  that has to exist on the machine).
+
+This repo doesn't hold the packs or tools — it's the index that tracks **where they live, what
+they provide, and how to get them**, so tooling and the [praxec.dev](https://praxec.dev) "packs"
+page render from one machine-readable source: [`packs.yaml`](packs.yaml).
 
 ## Loading a pack
 
-Point your gateway config at the pack's repo (cloned locally), and every definition it ships is
+Point your gateway config at the pack's repo (cloned locally); every definition it ships is
 namespace-prefixed:
 
 ```yaml
@@ -18,29 +22,50 @@ repos:
   - path: /path/to/cognitive-architectures   # → cognitive/flow.add-feature, cognitive/cap.plan.vet, …
 ```
 
-See the Praxec [multi-repo loading guide](https://praxec.dev/docs/guides/multi-repo-loading) for
-namespacing and collision rules.
+See the [multi-repo loading guide](https://praxec.dev/docs/guides/multi-repo-loading) for namespacing
+and collision rules.
 
-## The registry
+## Getting a pack's tools
 
-[`packs.yaml`](packs.yaml) is the source of truth. Each entry:
+A pack's `requires:` lists the MCP tools its connections spawn. Each tool in `packs.yaml` carries an
+ordered **provider chain** — praxec resolves a tool through it, preferring reproducibility:
 
-| Field | Meaning |
-|-------|---------|
-| `id` | Stable slug |
-| `name` | Human-readable name |
-| `namespace` | The prefix every definition loads under |
-| `description` | One-paragraph summary |
-| `repo` | Where the pack lives |
-| `tier` | `open` (freely loadable) or `premium` (paid/licensed) |
-| `tags` | Free-form discovery tags |
+```
+docker image  →  release binary  →  cargo
+```
 
-## Adding a pack
+`praxec doctor` detects which of a pack's required tools are missing and **offers** the provision
+command (it never installs silently). Pick the provider that fits your deployment:
 
-Open a PR adding an entry to `packs.yaml`. Keep entries alphabetical by `id`; a pack must ship a
-valid `praxec.repo.yaml` manifest in its repo root.
+| Provider | Best for |
+|----------|----------|
+| `docker` (`ghcr.io/praxec/<tool>`, pinned) | reproducible + sandboxed + zero toolchain (any language) — the default |
+| `release` (GitHub Releases binary) | low-friction native path, no Docker |
+| `cargo` (crates.io) | Rust devs / source builds |
+
+MCP tools are long-lived stdio processes (one per connection, not per call), so container startup
+is amortized — the reproducibility/sandbox win comes with negligible per-call cost.
+
+> **Status.** The `providers.*` and `mcp_registry_id` fields are the *canonical target coordinates*
+> for each tool. Publishing the artifacts — container images, release binaries, and
+> [official MCP registry](https://registry.modelcontextprotocol.io) entries — is CI follow-up; the
+> registry consumes these coordinates so praxec (and any MCP host) can resolve tools by a standard id.
+
+## Schema (`praxec.packs/v2`)
+
+**Pack:** `id` · `name` · `namespace` · `description` · `repo` · `tier` (`open`|`premium`) · `tags` ·
+`requires` (tool ids) · `extends` (base pack id, optional) · `external` (third-party/closed tools the
+operator wires themselves).
+
+**Tool:** `id` · `name` · `description` · `repo` · `command` (the spawnable binary) · `version` ·
+`mcp_registry_id` · `providers` (`docker` / `release` / `cargo`).
+
+## Adding an entry
+
+Open a PR editing `packs.yaml` (entries grouped, alphabetical by `id`). A pack must ship a valid
+`praxec.repo.yaml` manifest in its repo root; a tool must publish at least one provider.
 
 ## License
 
-The registry (this repo and `packs.yaml`) is [BSD-3-Clause](LICENSE). Individual packs carry their
-own licenses — see each pack's repo.
+The registry (this repo and `packs.yaml`) is [BSD-3-Clause](LICENSE). Individual packs and tools
+carry their own licenses — see each repo.

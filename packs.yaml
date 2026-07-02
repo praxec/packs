@@ -1,27 +1,138 @@
-# Praxec pack registry — the catalog of loadable capability/workflow packs.
-# See README.md. Tools + the praxec.dev "packs" page render from this file.
-schema: praxec.packs/v1
+# Praxec pack registry — the catalog of loadable workflow packs and the MCP
+# tools they depend on. Tools + the praxec.dev "packs" page render from this file.
+#
+# NOTE: `providers.*` and `mcp_registry_id` are the *canonical target coordinates*
+# for each tool. Publishing the artifacts (container images, release binaries,
+# and MCP-registry entries) is CI follow-up — see README.md.
+schema: praxec.packs/v2
 
+# ── Workflow packs ────────────────────────────────────────────────────────────
+# Capability/orchestrator libraries loaded into a gateway via `repos:`.
+# `requires` lists the praxec MCP tools (below) the pack's connections spawn.
 packs:
   - id: cognitive-architectures
     name: Cognitive Architectures
     namespace: cognitive
     description: >
-      The canonical SWE-lifecycle library — lifecycle orchestrators (flow.add-feature,
-      flow.bugfix-from-error-log, flow.safe-refactor, flow.triage-issue,
-      flow.evidence-driven-convergence) and the capabilities, skills, and scripts they
-      compose from. The pack most engineers running a coding agent want first.
+      The canonical SWE-lifecycle library — lifecycle orchestrators
+      (flow.add-feature, flow.bugfix-from-error-log, flow.safe-refactor,
+      flow.triage-issue, flow.evidence-driven-convergence) and the capabilities,
+      skills, and scripts they compose from. The pack most engineers running a
+      coding agent want first.
     repo: https://github.com/praxec/cognitive-architectures
     tier: open
     tags: [swe, coding, lifecycle, review, tdd]
+    requires: [cpm-planner, fmeca, elicitation, scientific-process]
+    external: [github-mcp-server]   # third-party MCP server, wired by the operator
 
   - id: cognitive-architectures-max
     name: Cognitive Architectures MAX
     namespace: cognitive-max
     description: >
-      The MAX-tier UX factory layered on cognitive-architectures — turns JTBD core-job
-      research into grounded, superior user experiences via capabilities, skills, and
-      workflows for product/UX work.
+      The MAX-tier UX factory layered on cognitive-architectures — turns JTBD
+      core-job research into grounded, superior user experiences via capabilities,
+      skills, and workflows for product/UX work.
     repo: https://github.com/praxec/cognitive-architectures-max
     tier: premium
     tags: [ux, jtbd, product, research]
+    extends: cognitive-architectures   # inherits the base pack's tools
+    requires: []
+    external: [structureos]            # closed-source (FrontRails), licensed separately
+
+# ── MCP tools ─────────────────────────────────────────────────────────────────
+# Standalone MCP servers the packs spawn as `kind: mcp` connections. Each resolves
+# through an ordered provider chain (docker -> release binary -> cargo). praxec's
+# `doctor` detects what's missing and offers the provision command (with consent).
+tools:
+  - id: cpm-planner
+    name: CPM Planner
+    description: >
+      Critical Path Method scheduling — earliest/latest starts, slack, the critical
+      path, and bottlenecks — plus lock-aware cohort coordination for parallel work.
+    repo: https://github.com/praxec/cpm-planner
+    command: cpm-planner
+    version: 0.0.1
+    mcp_registry_id: dev.praxec/cpm-planner
+    providers:
+      docker: ghcr.io/praxec/cpm-planner
+      release: https://github.com/praxec/cpm-planner/releases
+      cargo: cpm-planner
+
+  - id: fmeca
+    name: FMECA
+    description: >
+      Failure Mode, Effects & Criticality Analysis — event-sourced FMECA fold,
+      criticality matrix, and readiness scoring over an append-only session.
+    repo: https://github.com/praxec/fmeca
+    command: fmeca-mcp
+    version: 0.0.1
+    mcp_registry_id: dev.praxec/fmeca
+    providers:
+      docker: ghcr.io/praxec/fmeca
+      release: https://github.com/praxec/fmeca/releases
+
+  - id: elicitation
+    name: Elicitation
+    description: >
+      Human-finished requirements elicitation — structured interview sessions and
+      falsification-based discovery, resumable and append-only.
+    repo: https://github.com/praxec/elicitation
+    command: elicitation
+    version: 0.0.1
+    mcp_registry_id: dev.praxec/elicitation
+    providers:
+      docker: ghcr.io/praxec/elicitation
+      release: https://github.com/praxec/elicitation/releases
+
+  - id: scientific-process
+    name: Scientific Process
+    description: >
+      An append-only scientific-process server — hypotheses, experiments,
+      observations, conclusions, and verdicts, for evidence-driven work.
+    repo: https://github.com/praxec/scientific-process
+    command: scientific-process
+    version: 0.1.0
+    mcp_registry_id: dev.praxec/scientific-process
+    providers:
+      docker: ghcr.io/praxec/scientific-process
+      release: https://github.com/praxec/scientific-process/releases
+
+  - id: crossmatrix
+    name: Crossmatrix
+    description: >
+      Multidimensional House of Quality (QFD) — cross-dimensional relationship
+      matrices for structured trade-off and requirement analysis. (Available in
+      the catalog; not yet wired into a pack's connections.)
+    repo: https://github.com/praxec/crossmatrix
+    command: crossmatrix-mcp
+    version: 0.1.0
+    mcp_registry_id: dev.praxec/crossmatrix
+    providers:
+      docker: ghcr.io/praxec/crossmatrix
+      release: https://github.com/praxec/crossmatrix/releases
+
+  - id: log-analyzer
+    name: Log Analyzer
+    description: >
+      Build/log analysis — parse, grep, level counts, query, and summarize over
+      raw log output (e.g. a full build to surface every issue).
+    repo: https://github.com/praxec/log-analyzer
+    command: log-analyzer
+    version: 0.1.0
+    mcp_registry_id: dev.praxec/log-analyzer
+    providers:
+      docker: ghcr.io/praxec/log-analyzer
+      release: https://github.com/praxec/log-analyzer/releases
+
+  - id: markdown-administrator
+    name: Markdown Administrator
+    description: >
+      Markdown document administration — structured read/edit operations over
+      Markdown files.
+    repo: https://github.com/praxec/markdown-administrator
+    command: markdown-administrator
+    version: 0.1.0
+    mcp_registry_id: dev.praxec/markdown-administrator
+    providers:
+      docker: ghcr.io/praxec/markdown-administrator
+      release: https://github.com/praxec/markdown-administrator/releases
