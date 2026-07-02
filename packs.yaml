@@ -52,7 +52,7 @@ tools:
     repo: https://github.com/praxec/cpm-planner
     command: cpm-planner
     version: 0.0.1
-    mcp_registry_id: dev.praxec/cpm-planner
+    mcp_registry_id: io.github.praxec/cpm-planner
     providers:
       docker: ghcr.io/praxec/cpm-planner
       release: https://github.com/praxec/cpm-planner/releases
@@ -66,7 +66,7 @@ tools:
     repo: https://github.com/praxec/fmeca
     command: fmeca-mcp
     version: 0.0.1
-    mcp_registry_id: dev.praxec/fmeca
+    mcp_registry_id: io.github.praxec/fmeca
     providers:
       docker: ghcr.io/praxec/fmeca
       release: https://github.com/praxec/fmeca/releases
@@ -79,7 +79,7 @@ tools:
     repo: https://github.com/praxec/elicitation
     command: elicitation
     version: 0.0.1
-    mcp_registry_id: dev.praxec/elicitation
+    mcp_registry_id: io.github.praxec/elicitation
     providers:
       docker: ghcr.io/praxec/elicitation
       release: https://github.com/praxec/elicitation/releases
@@ -92,7 +92,7 @@ tools:
     repo: https://github.com/praxec/scientific-process
     command: scientific-process
     version: 0.1.0
-    mcp_registry_id: dev.praxec/scientific-process
+    mcp_registry_id: io.github.praxec/scientific-process
     providers:
       docker: ghcr.io/praxec/scientific-process
       release: https://github.com/praxec/scientific-process/releases
@@ -106,7 +106,7 @@ tools:
     repo: https://github.com/praxec/crossmatrix
     command: crossmatrix-mcp
     version: 0.1.0
-    mcp_registry_id: dev.praxec/crossmatrix
+    mcp_registry_id: io.github.praxec/crossmatrix
     providers:
       docker: ghcr.io/praxec/crossmatrix
       release: https://github.com/praxec/crossmatrix/releases
@@ -119,7 +119,7 @@ tools:
     repo: https://github.com/praxec/log-analyzer
     command: log-analyzer
     version: 0.1.0
-    mcp_registry_id: dev.praxec/log-analyzer
+    mcp_registry_id: io.github.praxec/log-analyzer
     providers:
       docker: ghcr.io/praxec/log-analyzer
       release: https://github.com/praxec/log-analyzer/releases
@@ -132,7 +132,7 @@ tools:
     repo: https://github.com/praxec/markdown-administrator
     command: markdown-administrator
     version: 0.1.0
-    mcp_registry_id: dev.praxec/markdown-administrator
+    mcp_registry_id: io.github.praxec/markdown-administrator
     providers:
       docker: ghcr.io/praxec/markdown-administrator
       release: https://github.com/praxec/markdown-administrator/releases
