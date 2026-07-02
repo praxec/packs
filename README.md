@@ -12,6 +12,22 @@ This repo doesn't hold the packs or tools — it's the index that tracks **where
 they provide, and how to get them**, so tooling and the [praxec.dev](https://praxec.dev) "packs"
 page render from one machine-readable source: [`packs.yaml`](packs.yaml).
 
+## Quick start — one command
+
+Install the gateway (`cargo install praxec`), then provision a pack **and every MCP tool it needs**,
+with a ready-to-run gateway config:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | bash
+# …or a specific pack:
+curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | bash -s -- cognitive-architectures
+```
+
+[`setup.sh`](setup.sh) reads this registry, downloads each required tool (release binary for your
+platform, or a Docker shim as fallback) into `~/.praxec/bin`, clones the pack, walks you through
+provider keys (`px set-provider-keys`), writes `~/praxec-workspace/gateway.yaml`, validates it with
+`praxec check`, and prints the `praxec serve` command. That's the whole setup.
+
 ## Loading a pack
 
 Point your gateway config at the pack's repo (cloned locally); every definition it ships is
