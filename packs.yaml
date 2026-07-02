@@ -1,0 +1,27 @@
+# Praxec pack registry — the catalog of loadable capability/workflow packs.
+# See README.md. Tools + the praxec.dev "packs" page render from this file.
+schema: praxec.packs/v1
+
+packs:
+  - id: cognitive-architectures
+    name: Cognitive Architectures
+    namespace: cognitive
+    description: >
+      The canonical SWE-lifecycle library — lifecycle orchestrators (flow.add-feature,
+      flow.bugfix-from-error-log, flow.safe-refactor, flow.triage-issue,
+      flow.evidence-driven-convergence) and the capabilities, skills, and scripts they
+      compose from. The pack most engineers running a coding agent want first.
+    repo: https://github.com/praxec/cognitive-architectures
+    tier: open
+    tags: [swe, coding, lifecycle, review, tdd]
+
+  - id: cognitive-architectures-max
+    name: Cognitive Architectures MAX
+    namespace: cognitive-max
+    description: >
+      The MAX-tier UX factory layered on cognitive-architectures — turns JTBD core-job
+      research into grounded, superior user experiences via capabilities, skills, and
+      workflows for product/UX work.
+    repo: https://github.com/praxec/cognitive-architectures-max
+    tier: premium
+    tags: [ux, jtbd, product, research]
