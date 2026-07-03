@@ -41,7 +41,7 @@ esac
 say "Reading the pack registry"
 REG=$(curl -fsSL "$REGISTRY") || die "cannot fetch registry: $REGISTRY"
 RESOLVED=$(REG_CONTENT="$REG" python3 - "$PACK" <<'PY'
-import os, sys, yaml
+import os, sys, yaml, shlex
 pack_id = sys.argv[1]
 reg = yaml.safe_load(os.environ["REG_CONTENT"])
 packs = {p["id"]: p for p in reg.get("packs", [])}
@@ -56,15 +56,15 @@ while cur:
     for tid in cur.get("requires", []) or []:
         if tid not in seen: seen.add(tid); need.append(tid)
     cur = packs.get(cur.get("extends"))
-print("PACK_REPO=" + p["repo"])
-print("PACK_NS=" + p.get("namespace", pack_id))
+print("PACK_REPO=" + shlex.quote(p["repo"]))
+print("PACK_NS=" + shlex.quote(p.get("namespace", pack_id)))
 ext = " ".join(p.get("external", []) or [])
-print("EXTERNAL=" + ext)
+print("EXTERNAL=" + shlex.quote(ext))
 lines = []
 for tid in need:
     t = tools[tid]
     lines.append("|".join([t["id"], t["command"], str(t["version"]), t["repo"], t["providers"].get("docker","")]))
-print("TOOLS=" + ";".join(lines))
+print("TOOLS=" + shlex.quote(";".join(lines)))
 PY
 ) || die "$RESOLVED"
 eval "$RESOLVED"
