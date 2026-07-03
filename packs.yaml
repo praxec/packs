@@ -43,6 +43,21 @@ packs:
 # Standalone MCP servers the packs spawn as `kind: mcp` connections. Each resolves
 # through an ordered provider chain (docker -> release binary -> cargo). praxec's
 # `doctor` detects what's missing and offers the provision command (with consent).
+  - id: praxec-meta
+    name: Praxec Meta
+    namespace: meta
+    description: >
+      The meta/authoring layer — flows + capabilities to author and optimize praxec
+      definitions themselves (flow.author-capability, flow.author-flow, flow.optimize-flow,
+      flow.configure-models). Research a gateway's live inventory, compose implementation
+      shapes, emit + check YAML. Loads standalone (ships stub review/PR primitives);
+      co-load cognitive-architectures to override them with the richer versions.
+    repo: https://github.com/praxec/praxec-meta
+    tier: open
+    tags: [authoring, meta, dogfooding, optimization]
+    requires: []
+    external: [github-mcp-server]      # cap.coordinate.pr-open; gateway_self is the gateway itself
+
 tools:
   - id: cpm-planner
     name: CPM Planner
