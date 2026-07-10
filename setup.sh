@@ -98,6 +98,25 @@ PACK_DIR="$WORK/$PACK"
 if [ -d "$PACK_DIR/.git" ]; then say "Updating pack $PACK"; git -C "$PACK_DIR" pull -q || true
 else say "Cloning pack $PACK"; git clone -q "$PACK_REPO" "$PACK_DIR"; fi
 
+# ── co-load the base layers (cognitive-architectures + praxec-meta) ──────────
+# Two layers are universal companions loaded beside ANY pack:
+#   cognitive-architectures — the canonical SWE lifecycle flows + capabilities
+#   praxec-meta             — the authoring surface (flow.author-flow / -capability)
+# Without the authoring layer a fresh operator asking praxec "how do I author a
+# flow?" gets nothing and hand-rolls YAML; without the base SWE layer the
+# lifecycle flows are missing. Each is skipped if it IS the chosen pack (already
+# loaded) or if its clone fails (best-effort — never blocks setup).
+BASE_DIRS=""
+add_base() { # $1 = repo id, $2 = git URL
+  [ "$PACK" = "$1" ] && return 0   # chosen pack IS this base — already loaded above
+  d="$WORK/$1"
+  if [ -d "$d/.git" ]; then say "Updating base layer ($1)"; git -C "$d" pull -q || true
+  else say "Cloning base layer ($1)"; git clone -q "$2" "$d" || { warn "could not clone $1; continuing without it"; return 0; }; fi
+  [ -d "$d/.git" ] && BASE_DIRS="$BASE_DIRS $d"
+}
+add_base cognitive-architectures https://github.com/praxec/cognitive-architectures.git
+add_base praxec-meta https://github.com/praxec/praxec-meta.git
+
 # ── provider keys (easy) ─────────────────────────────────────────────────────
 KEYS="$HOME_DIR/providers.env"
 if [ -s "$KEYS" ]; then
@@ -121,6 +140,9 @@ audit: { sink: file, path: $HOME_DIR/audit }
 repos:
   - path: $PACK_DIR
 YAML
+  # Co-load the base layers (canonical SWE + authoring) so the lifecycle flows
+  # AND flow.author-flow are present + discoverable out of the box.
+  for d in $BASE_DIRS; do printf '  - path: %s\n' "$d" >> "$CFG"; done
   say "Wrote $CFG"
 else
   say "Keeping existing $CFG"
