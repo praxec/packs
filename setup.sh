@@ -3,7 +3,8 @@
 #
 # Provisions a workflow pack + every MCP tool it needs, sets up your provider
 # keys, wires a gateway config, validates it, and leaves you ready to serve.
-# Assumes the `praxec` gateway binary is already installed (cargo install praxec).
+# Assumes the `praxec` gateway binary is already installed:
+#   curl -fsSL https://raw.githubusercontent.com/praxec/praxec/main/install.sh | sh
 #
 #   curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | bash
 #   # or, for a specific pack:
@@ -23,7 +24,7 @@ die()  { printf '\033[1;31m✗\033[0m %s\n' "$*" >&2; exit 1; }
 mkdir -p "$BIN_DIR" "$WORK"
 
 # ── deps ─────────────────────────────────────────────────────────────────────
-command -v praxec  >/dev/null || die "the 'praxec' gateway binary isn't on PATH — install it first: cargo install praxec"
+command -v praxec  >/dev/null || die "the 'praxec' gateway binary isn't on PATH — install it first: curl -fsSL https://raw.githubusercontent.com/praxec/praxec/main/install.sh | sh"
 command -v python3 >/dev/null || die "python3 is required to read the registry"
 command -v curl >/dev/null && command -v tar >/dev/null && command -v git >/dev/null || die "need curl, tar, and git"
 
