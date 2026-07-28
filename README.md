@@ -17,15 +17,19 @@ page render from one machine-readable source: [`packs.yaml`](packs.yaml).
 Install the gateway (`curl -fsSL https://raw.githubusercontent.com/praxec/praxec/main/install.sh | sh`),
 then provision a pack **and every MCP tool it needs**, with a ready-to-run gateway config:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | bash
+```sh
+curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | sh
 # …or a specific pack:
-curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | bash -s -- cognitive-architectures
+curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | sh -s -- cognitive-architectures
+
+# No curl? busybox wget works too:
+wget -qO- https://raw.githubusercontent.com/praxec/packs/main/setup.sh | sh
 ```
 
 [`setup.sh`](setup.sh) reads this registry, downloads each required tool (release binary for your
-platform, or a Docker shim as fallback) into `~/.praxec/bin`, clones the pack, walks you through
-provider keys (`px set-provider-keys`), writes `~/praxec-workspace/gateway.yaml`, validates it with
+platform, or a Docker shim as fallback) into `~/.praxec/bin`, clones the pack, points you at
+provider keys (the [`configure-providers.sh`](https://github.com/praxec/praxec) helper, or a plain
+`export OPENROUTER_API_KEY=…`), writes `~/praxec-workspace/gateway.yaml`, validates it with
 `praxec check`, and prints the `praxec serve` command. That's the whole setup.
 
 ## Loading a pack
