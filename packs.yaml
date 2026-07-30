@@ -58,6 +58,25 @@ packs:
     requires: []
     external: [github-mcp-server]      # cap.coordinate.pr-open; gateway_self is the gateway itself
 
+  - id: frontrails
+    name: FrontRails Pack
+    namespace: frontrails
+    description: >
+      Exposes the FrontRails toolsets — IntentOS (spec/intent governance),
+      StructureOS (code-structure refactoring), and SecurityOS (security scanning)
+      — as praxec capabilities, plus the frontrails_spec and frontrails_burndown
+      workflows. A public demo of the licensed FrontRails MCP servers: pure wiring
+      config, FrontRails itself is never modified and its gates stay authoritative.
+      Consumed via `include:` (a pattern pack merged with a sha256 hash), not a
+      namespaced `repos:` load. NOTE: the SecurityOS binary and some StructureOS
+      action names are not yet verified against the live servers — see the repo's
+      OPEN ITEMS before relying on them.
+    repo: https://github.com/praxec/frontrails-praxec-pack
+    tier: open
+    tags: [frontrails, intentos, structureos, securityos, spec, refactor, security, demo]
+    requires: []
+    external: [intentos, structureos, securityos]   # closed-source FrontRails, licensed separately
+
 tools:
   - id: cpm-planner
     name: CPM Planner

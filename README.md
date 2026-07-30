@@ -14,8 +14,8 @@ page render from one machine-readable source: [`packs.yaml`](packs.yaml).
 
 ## Quick start — one command
 
-Install the gateway (`cargo install praxec`), then provision a pack **and every MCP tool it needs**,
-with a ready-to-run gateway config:
+Install the gateway (`curl -fsSL https://raw.githubusercontent.com/praxec/praxec/main/install.sh | sh`),
+then provision a pack **and every MCP tool it needs**, with a ready-to-run gateway config:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | bash
