@@ -22,7 +22,7 @@ packs:
     repo: https://github.com/praxec/cognitive-architectures
     tier: open
     tags: [swe, coding, lifecycle, review, tdd]
-    requires: [cpm-planner, fmeca, elicitation, scientific-process]
+    requires: [cpm-planner, fmeca, elicitation, scientific-process, corpus, markdown-administrator]
     external: [github-mcp-server]   # third-party MCP server, wired by the operator
 
   - id: cognitive-architectures-max
@@ -85,7 +85,7 @@ tools:
       path, and bottlenecks — plus lock-aware cohort coordination for parallel work.
     repo: https://github.com/praxec/cpm-planner
     command: cpm-planner
-    version: 0.0.1
+    version: 0.0.2
     mcp_registry_id: io.github.praxec/cpm-planner
     providers:
       docker: ghcr.io/praxec/cpm-planner
@@ -139,7 +139,7 @@ tools:
       the catalog; not yet wired into a pack's connections.)
     repo: https://github.com/praxec/crossmatrix
     command: crossmatrix-mcp
-    version: 0.1.0
+    version: 0.2.0
     mcp_registry_id: io.github.praxec/crossmatrix
     providers:
       docker: ghcr.io/praxec/crossmatrix
@@ -170,3 +170,17 @@ tools:
     providers:
       docker: ghcr.io/praxec/markdown-administrator
       release: https://github.com/praxec/markdown-administrator/releases
+
+  - id: corpus
+    name: Corpus
+    description: >
+      Docs-RAG retrieval — incremental, content-hashed BM25 (+ optional semantic)
+      index over a repo's documentation. Backs cognitive/flow.audit-docs.
+    repo: https://github.com/praxec/corpus
+    command: corpus
+    version: 0.0.1
+    mcp_registry_id: io.github.praxec/corpus
+    providers:
+      docker: ghcr.io/praxec/corpus
+      release: https://github.com/praxec/corpus/releases
+      cargo: corpus
