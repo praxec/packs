@@ -14,23 +14,22 @@ page render from one machine-readable source: [`packs.yaml`](packs.yaml).
 
 ## Quick start — one command
 
-Install the gateway (`curl -fsSL https://raw.githubusercontent.com/praxec/praxec/main/install.sh | sh`),
-then provision a pack **and every MCP tool it needs**, with a ready-to-run gateway config:
+Install the gateway ([`install.sh`](https://github.com/praxec/praxec#install)), then wire the open
+starter packs **and provision every MCP tool they need**, with a ready-to-run config and your
+editor wired:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | sh
-# …or a specific pack:
-curl -fsSL https://raw.githubusercontent.com/praxec/packs/main/setup.sh | sh -s -- cognitive-architectures
-
-# No curl? busybox wget works too:
-wget -qO- https://raw.githubusercontent.com/praxec/packs/main/setup.sh | sh
+praxec init --with-starter-packs --yes
 ```
 
-[`setup.sh`](setup.sh) reads this registry, downloads each required tool (release binary for your
-platform, or a Docker shim as fallback) into `~/.praxec/bin`, clones the pack, points you at
-provider keys (the [`configure-providers.sh`](https://github.com/praxec/praxec) helper, or a plain
-`export OPENROUTER_API_KEY=…`), writes `~/praxec-workspace/gateway.yaml`, validates it with
-`praxec check`, and prints the `praxec serve` command. That's the whole setup.
+That scaffolds a working gateway config, wires the open packs (`cognitive-architectures` +
+`praxec-meta`) and the always-latest registry, provisions their tools as prebuilt binaries,
+captures a provider key (`praxec providers set` manages keys later), wires your editor's MCP
+server, and ends in a `doctor` readiness verdict — cross-platform, Windows included. Add another
+pack with `praxec init --pack <git-uri>`, or preview one first with `praxec pack list <repo>`.
+
+(This replaces the old `setup.sh` shell installer: `praxec init --with-starter-packs` does the same
+and more — editor wiring, the canonical `~/.config/praxec`, no bash/`px` dependency.)
 
 ## Loading a pack
 
