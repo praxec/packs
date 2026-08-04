@@ -22,7 +22,7 @@ packs:
     repo: https://github.com/praxec/cognitive-architectures
     tier: open
     tags: [swe, coding, lifecycle, review, tdd]
-    requires: [cpm-planner, fmeca, elicitation, scientific-process]
+    requires: [cpm-planner, fmeca, elicitation, scientific-process, corpus, markdown-administrator]
     external: [github-mcp-server]   # third-party MCP server, wired by the operator
 
   - id: cognitive-architectures-max
@@ -77,6 +77,25 @@ packs:
     requires: []
     external: [intentos, structureos, securityos]   # closed-source FrontRails, licensed separately
 
+  - id: design
+    name: Design
+    namespace: design
+    description: >
+      UI-design annealing pipeline. Generate distinctive, fit-for-purpose design
+      directions with a FRONTIER model, then prune-and-steer with the HUMAN as the
+      fitness function (diverge → prune → steer → refine → converge) — the human's
+      likes/dislikes are the gradient the next round anneals toward. Once a design
+      is approved, roll the design system across a site with a COMMODITY model,
+      gated per surface by token-adherence + usability so a cheap model can't
+      regress it. Frontier creates; commodity propagates. Needs the `design`
+      (frontier) and `rollout` (commodity) model affinities bound in models.yaml,
+      and the Apache-2.0 `impeccable` usability detector (run via npx).
+    repo: https://github.com/praxec/design
+    tier: open
+    tags: [design, ui, annealing, prune-and-steer, rollout, kimi, deepseek]
+    requires: []
+    external: []
+
 tools:
   - id: cpm-planner
     name: CPM Planner
@@ -85,7 +104,7 @@ tools:
       path, and bottlenecks — plus lock-aware cohort coordination for parallel work.
     repo: https://github.com/praxec/cpm-planner
     command: cpm-planner
-    version: 0.0.1
+    version: 0.0.2
     mcp_registry_id: io.github.praxec/cpm-planner
     providers:
       docker: ghcr.io/praxec/cpm-planner
@@ -139,7 +158,7 @@ tools:
       the catalog; not yet wired into a pack's connections.)
     repo: https://github.com/praxec/crossmatrix
     command: crossmatrix-mcp
-    version: 0.1.0
+    version: 0.2.0
     mcp_registry_id: io.github.praxec/crossmatrix
     providers:
       docker: ghcr.io/praxec/crossmatrix
@@ -170,3 +189,17 @@ tools:
     providers:
       docker: ghcr.io/praxec/markdown-administrator
       release: https://github.com/praxec/markdown-administrator/releases
+
+  - id: corpus
+    name: Corpus
+    description: >
+      Docs-RAG retrieval — incremental, content-hashed BM25 (+ optional semantic)
+      index over a repo's documentation. Backs cognitive/flow.audit-docs.
+    repo: https://github.com/praxec/corpus
+    command: corpus
+    version: 0.0.1
+    mcp_registry_id: io.github.praxec/corpus
+    providers:
+      docker: ghcr.io/praxec/corpus
+      release: https://github.com/praxec/corpus/releases
+      cargo: corpus
