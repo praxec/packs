@@ -77,6 +77,25 @@ packs:
     requires: []
     external: [intentos, structureos, securityos]   # closed-source FrontRails, licensed separately
 
+  - id: design
+    name: Design
+    namespace: design
+    description: >
+      UI-design annealing pipeline. Generate distinctive, fit-for-purpose design
+      directions with a FRONTIER model, then prune-and-steer with the HUMAN as the
+      fitness function (diverge → prune → steer → refine → converge) — the human's
+      likes/dislikes are the gradient the next round anneals toward. Once a design
+      is approved, roll the design system across a site with a COMMODITY model,
+      gated per surface by token-adherence + usability so a cheap model can't
+      regress it. Frontier creates; commodity propagates. Needs the `design`
+      (frontier) and `rollout` (commodity) model affinities bound in models.yaml,
+      and the Apache-2.0 `impeccable` usability detector (run via npx).
+    repo: https://github.com/praxec/design
+    tier: open
+    tags: [design, ui, annealing, prune-and-steer, rollout, kimi, deepseek]
+    requires: []
+    external: []
+
 tools:
   - id: cpm-planner
     name: CPM Planner
